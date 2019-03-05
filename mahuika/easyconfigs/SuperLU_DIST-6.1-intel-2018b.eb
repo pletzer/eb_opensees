@@ -1,5 +1,5 @@
 name = 'SuperLU_DIST'
-version = '6.1'
+version = '6.1.1'
 easyblock = 'CMakeMake'
 
 homepage = 'http://crd-legacy.lbl.gov/~xiaoye/SuperLU/'
@@ -9,11 +9,11 @@ description = """A library for the direct solution of large, sparse, nonsymmetri
 toolchain = {'name': 'intel', 'version': '2018b'}
 toolchainopts = {'opt': True, 'pic': True, 'usempi': True}
 
-source_urls = ['http://crd-legacy.lbl.gov/~xiaoye/SuperLU/']
-sources = ["superlu_%(version)s.tar.gz"]
+source_urls = ['https://crd-legacy.lbl.gov/~xiaoye/SuperLU/']
+sources = ["superlu_dist_%(version)s.tar.gz"]
 
 builddependencies = [('CMake', '3.9.1', '', True),
-                     ('ParMETIS', '4.0.3', '', True),]
+                     ('ParMETIS', '4.0.3',),]
 
 # Partially derived from unused superlu easyblock
 configopts = '-DTPL_PARMETIS_INCLUDE_DIRS="${EBROOTPARMETIS}/include;${EBROOTPARMETIS}/metis/include"'
