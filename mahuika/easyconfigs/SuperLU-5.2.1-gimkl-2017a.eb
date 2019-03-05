@@ -1,0 +1,28 @@
+name = 'SuperLU'
+version = '5.2.1'
+easyblock = 'CMakeMake'
+
+homepage = 'http://crd-legacy.lbl.gov/~xiaoye/SuperLU/'
+description = """A library for the direct solution of large, sparse, nonsymmetric systems
+ of linear equations."""
+
+toolchain = {'name': 'gimkl', 'version': '2017a'}
+toolchainopts = {'opt': True, 'pic': True}
+
+source_urls = ['http://crd-legacy.lbl.gov/~xiaoye/SuperLU/']
+sources = ["superlu_%(version)s.tar.gz"]
+
+builddependencies = [('CMake', '3.9.1', '', True)]
+
+# Partially derived from unused superlu easyblock
+configopts = '-Denable_blaslib=OFF -DBUILD_SHARED_LIBS=ON -Denable_examples=OFF -DTPL_BLAS_LIBRARIES="$LIBBLAS_MT" '
+if toolchainopts.get('pic'):
+    configopts += '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
+
+# libsuperlu.so ends up in lib64/ not lib/, which upsets the superlu easyblock. I don't care.
+sanity_check_paths = {
+    'files': [], 
+    'dirs': ["include"],
+}
+
+moduleclass = 'numlib'
