@@ -1,0 +1,28 @@
+name = 'METIS'
+version = '4.0.3'
+
+homepage = 'http://glaros.dtc.umn.edu/gkhome/metis/metis/overview'
+description = """METIS is a set of serial programs for partitioning graphs, partitioning finite element meshes,
+and producing fill reducing orderings for sparse matrices. The algorithms implemented in METIS are based on the
+multilevel recursive-bisection, multilevel k-way, and multi-constraint partitioning schemes."""
+
+toolchain = {'name': 'intel', 'version': '2018b'}
+toolchainopts = {'optarch': True, 'pic': True, 'openmp': True}
+
+sources = [SOURCELOWER_TAR_GZ]
+source_urls = [
+    'http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis',
+    'http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD',
+]
+
+# Multiple versions fails during install because it tries to re-do some symlink creation.
+#configopts = ['openmp=1', 'openmpi=1 shared=1']
+
+# Shared may be good for OpenSees which links in METIS directly and also via MUMPS,
+configopts = ['openmpi=1 shared=1']
+
+#patches = ['METIS_IDXTYPEWIDTH.patch']
+
+builddependencies = [('CMake', '3.9.1', '', True)]
+
+moduleclass = 'math'

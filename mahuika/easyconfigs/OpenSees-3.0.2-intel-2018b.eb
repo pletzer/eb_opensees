@@ -1,0 +1,48 @@
+easyblock = 'MakeCp'
+
+name = 'OpenSees'
+version = '3.0.2'
+metis_version = '4.0.3'
+homepage = 'http://opensees.berkeley.edu'
+description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
+
+toolchain = {'name': 'intel', 'version': '2018b'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/OpenSees/OpenSees/archive']
+sources = ['V%(version)s.tar.gz']
+
+dependencies = [
+    ('Tcl', '8.6.6'),
+    ('METIS', metis_version),
+    ('SuperLU', '5.2.1'),
+#    ('SuperLU_DIST', '4.3'),
+    ('arpack-ng', '3.4.0'),
+#    ('SuiteSparse', '4.5.4', 'METIS-%s' % metis_version),
+    ('MUMPS', '4.10.0', '-metis-%s' % metis_version),
+]
+
+MAKEFILE = 'OpenSees_EB_Makefile_v6.def'
+patches = [
+    (MAKEFILE, 'MAKES'), 
+]
+
+prebuildopts = 'rm -f Makefile.def && cp "MAKES/%s" ./Makefile.def && mkdir -p lib && mkdir -p bin && ' % MAKEFILE
+
+# With this OpenSees version the 'PARALLEL_INTERPRETERS' mode (ie: OpenSeesMP) apparently still requires 
+# the mumps.o hack from OpenSees_EB_Makefile_v4.def, but the more useful OpenSeesSP does not.
+MODES = ['SEQUENTIAL', 'PARALLEL'] #, 'PARALLEL_INTERPRETERS']
+
+_expected_executables = ['OpenSees' + {'SEQUENTIAL':'', 'PARALLEL_INTERPRETERS':'MP', 'PARALLEL':'SP'}[m] for m in MODES]
+buildopts = ['all HOME=`pwd` PROGRAMMING_MODE='+mode for mode in MODES]
+
+files_to_copy = [(["bin/*"], "bin"), "Makefile.def"]  # get repeatedly copied if len(MODES)>1, so no dirs
+
+sanity_check_paths = {
+    'files': ['bin/'+f for f in _expected_executables],
+    'dirs': ["."],
+    }
+
+parallel = 8
+
+moduleclass = 'cae'
