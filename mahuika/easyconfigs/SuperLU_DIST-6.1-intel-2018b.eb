@@ -13,11 +13,15 @@ source_urls = ['https://crd-legacy.lbl.gov/~xiaoye/SuperLU/']
 sources = ["superlu_dist_%(version)s.tar.gz"]
 
 builddependencies = [('CMake', '3.9.1', '', True),
-                     ('ParMETIS', '4.0.3',),]
+                     ('ParMETIS', '4.0.3',),
+                     ('CombBLAS', '1.6.2'),
+                    ]
 
 # Partially derived from unused superlu easyblock
-configopts = '-DTPL_PARMETIS_INCLUDE_DIRS="${EBROOTPARMETIS}/include"'
-configopts += ' -DTPL_PARMETIS_LIBRARIES="${EBROOTPARMETIS}/lib/libparmetis.a;${EBROOTPARMETIS}/lib/libmetis.a"' #-Denable_blaslib=OFF -DBUILD_SHARED_LIBS=ON -Denable_examples=OFF -DTPL_BLAS_LIBRARIES="$LIBBLAS_MT" '
+configopts = '-Denable_examples=OFF -Denable_tests=OFF'
+configopts += ' -DTPL_PARMETIS_INCLUDE_DIRS="${EBROOTPARMETIS}/include"'
+configopts += ' -DTPL_PARMETIS_LIBRARIES="${EBROOTPARMETIS}/lib/libparmetis.a"'
+
 if toolchainopts.get('pic'):
     configopts += '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
 
