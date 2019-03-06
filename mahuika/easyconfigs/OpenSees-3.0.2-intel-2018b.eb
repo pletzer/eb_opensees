@@ -22,7 +22,7 @@ dependencies = [
     ('MUMPS', '4.10.0', '-metis-%s' % metis_version),
 ]
 
-MAKEFILE = 'OpenSees_EB_Makefile_v6.def'
+MAKEFILE = 'OpenSees_EB_Makefile_v7.def'
 patches = [
     (MAKEFILE, 'MAKES'), 
 ]
