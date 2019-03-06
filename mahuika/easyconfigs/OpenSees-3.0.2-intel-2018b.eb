@@ -17,7 +17,7 @@ dependencies = [
     ('METIS', metis_version),
     ('SuperLU', '5.2.1'),
 #    ('SuperLU_DIST', '4.3'),
-    ('arpack-ng', '3.4.0'),
+    ('arpack-ng', '3.6.3'),
 #    ('SuiteSparse', '4.5.4', 'METIS-%s' % metis_version),
     ('MUMPS', '4.10.0', '-metis-%s' % metis_version),
 ]
