@@ -7,7 +7,7 @@ homepage = 'http://opensees.berkeley.edu'
 description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
 
 toolchain = {'name': 'intel', 'version': '2018b'}
-toolchainopts = {'pic': True}
+toolchainopts = {'pic': True, 'usempi': True}
 
 source_urls = ['https://github.com/OpenSees/OpenSees/archive']
 sources = ['V%(version)s.tar.gz']
