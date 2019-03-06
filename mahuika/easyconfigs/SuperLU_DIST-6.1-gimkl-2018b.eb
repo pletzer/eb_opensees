@@ -1,0 +1,35 @@
+name = 'SuperLU_DIST'
+version = '6.1.1'
+easyblock = 'CMakeMake'
+
+homepage = 'http://crd-legacy.lbl.gov/~xiaoye/SuperLU/'
+description = """A library for the direct solution of large, sparse, nonsymmetric systems
+ of linear equations. SuperLU_DIST is a aparallel extension to the serial SuperLU library."""
+
+toolchain = {'name': 'gimkl', 'version': '2018b'}
+toolchainopts = {'opt': True, 'pic': True, 'usempi': True}
+
+source_urls = ['https://crd-legacy.lbl.gov/~xiaoye/SuperLU/']
+sources = ["superlu_dist_%(version)s.tar.gz"]
+
+builddependencies = [('CMake', '3.9.1', '', True),
+                     ('ParMETIS', '4.0.3',),
+                     ('CombBLAS', '1.6.2'),
+                    ]
+
+# Partially derived from unused superlu easyblock
+configopts = '-Denable_examples=OFF -Denable_tests=OFF'
+configopts += ' -DTPL_PARMETIS_INCLUDE_DIRS="${EBROOTPARMETIS}/include"'
+configopts += ' -DTPL_PARMETIS_LIBRARIES="${EBROOTPARMETIS}/lib/libparmetis.a"'
+configopts += ' -DTPL_BLAS_LIBRARIES="$MKLROOT/lib/int64/mkl_core.a"' # MKL 
+
+if toolchainopts.get('pic'):
+    configopts += '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
+
+# libsuperlu.so ends up in lib64/ not lib/, which upsets the superlu easyblock. I don't care.
+sanity_check_paths = {
+    'files': [], 
+    'dirs': ["include"],
+}
+
+moduleclass = 'numlib'

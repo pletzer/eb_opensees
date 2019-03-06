@@ -1,0 +1,22 @@
+name = 'MUMPS'
+version = '4.10.0'
+versionsuffix = '-metis-4.0.3'
+
+homepage = 'http://graal.ens-lyon.fr/MUMPS/'
+description = "A parallel sparse direct solver"
+
+toolchain = {'name': 'gimkl', 'version': '2018b'}
+toolchainopts = {'pic': True, 'usempi': True}
+
+source_urls = ['http://mumps.enseeiht.fr/']
+sources = ['%(name)s_%(version)s.tar.gz']
+
+dependencies = [
+    ('SCOTCH', '6.0.4'),
+    ('METIS', '4.0.3'),
+]
+
+parallel = 1
+buildopts = 'all'
+
+moduleclass = 'math'
