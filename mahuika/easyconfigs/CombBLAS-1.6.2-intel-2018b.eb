@@ -1,0 +1,26 @@
+name = 'CombBLAS'
+version = '1.6.2'
+easyblock = 'CMakeMake'
+
+homepage = 'https://people.eecs.berkeley.edu/~aydin/CombBLAS/html/index.html'
+description = """iThe Combinatorial BLAS (CombBLAS) is an extensible distributed-memory parallel graph library offering a small but powerful set of linear algebra primitives specifically targeting graph analytics."""
+
+toolchain = {'name': 'intel', 'version': '2018b'}
+toolchainopts = {'opt': True, 'pic': True, 'usempi': True}
+
+source_urls = ['http://eecs.berkeley.edu/~aydin/CombBLAS_FILES/']
+sources = ["CombBLAS_beta_16_2.tgz"]
+
+builddependencies = [('CMake', '3.9.1', '', True),
+                    ]
+
+configopts = ''
+if toolchainopts.get('pic'):
+    configopts += '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
+
+sanity_check_paths = {
+    'files': [], 
+    'dirs': ["include"],
+}
+
+moduleclass = 'numlib'
