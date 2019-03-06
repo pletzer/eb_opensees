@@ -21,7 +21,7 @@ builddependencies = [('CMake', '3.9.1', '', True),
 configopts = '-Denable_examples=OFF -Denable_tests=OFF'
 configopts += ' -DTPL_PARMETIS_INCLUDE_DIRS="${EBROOTPARMETIS}/include"'
 configopts += ' -DTPL_PARMETIS_LIBRARIES="${EBROOTPARMETIS}/lib/libparmetis.a"'
-configopts += ' -DCMAKE_C_FLAGS="-DMKL_ILP64 -I${MKLROOT}/include"' # MKL 
+configopts += ' -DTPL_BLAS_LIBRARIES="$MKLROOT/lib/int64/mkl_core.a"' # MKL 
 
 if toolchainopts.get('pic'):
     configopts += '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
