@@ -110,12 +110,12 @@ COMPILER_LIBS = -ldl
 ifeq ($(PROGRAMMING_MODE), SEQUENTIAL)
     OpenSees_PROGRAM = $(HOME)/bin/OpenSees
     PROGRAMMING_FLAG =
-    CC++            = $(CXX)
+    CC++            = $(CXX) 
 else
     CC++            =  $(MPICXX)
     CC              =  $(MPICC)
     FC              =  $(MPIF90)
-    F90             =  $(FC)
+    F90             =  $(FC) 
     FORTRAN         =  $(FC)
 endif
 
@@ -198,7 +198,7 @@ GRAPHIC_FLAG = -D_NOGRAPHICS
 RELIABILITY_FLAG =
 DEBUG_FLAG = 
 
-OPT_FLAG = -O2 
+OPT_FLAG = -g -O3
 
 COMP_FLAG = 
 
