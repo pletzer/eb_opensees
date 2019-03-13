@@ -1,0 +1,103 @@
+--- CMakeLists.txt	2016-07-03 07:52:15.000000000 +1200
++++ CMakeLists.txt	2017-02-13 15:31:35.111404457 +1300
+@@ -1,9 +1,17 @@
+ cmake_minimum_required(VERSION 2.8.6)
+-project(arpack)
++
++if (NOT DEFINED CMAKE_BUILD_TYPE)
++   set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
++endif ()
++
++project(arpack C Fortran)
+ 
+ # Adopted from https://github.com/feymark/arpack.git
+ 
+-enable_language(Fortran)
++if (POLICY CMP0042)
++  # enable MACOSX_RPATH by default
++  cmake_policy (SET CMP0042 NEW)
++endif ()
+ 
+ option(MPI "Enable parallel support" OFF)
+ #option(SYSTEM_BLAS "Use system BLAS" ON)
+@@ -80,7 +88,7 @@
+     UTIL/icnteq.f
+     UTIL/icopy.f
+     UTIL/iset.f
+-    UTIL/iswap.f 
++    UTIL/iswap.f
+     UTIL/ivout.f
+     UTIL/second_NONE.f
+     UTIL/svout.f
+@@ -103,22 +111,27 @@
+ #                   ${arpacklapack_STAT_SRCS}
+ #                   ${arpackutil_STAT_SRCS}
+ #                   ${arpacksrc_STAT_SRCS})
+-add_library(arpack 
++add_library(arpack
+                    ${arpackutil_STAT_SRCS}
+                    ${arpacksrc_STAT_SRCS})
+ 
+ target_link_libraries(arpack ${BLAS_LIBRARIES})
+ target_link_libraries(arpack ${LAPACK_LIBRARIES})
+ set_target_properties(arpack PROPERTIES OUTPUT_NAME arpack${LIBSUFFIX})
++set_target_properties(arpack PROPERTIES VERSION 2.0.0)
++set_target_properties(arpack PROPERTIES SOVERSION 2)
+ 
+ if (MPI)
+ #    add_library(parpack SHARED
+-    add_library(parpack 
++    add_library(parpack
+                         ${parpacksrc_STAT_SRCS}
+                         ${parpackutil_STAT_SRCS})
+ 
+     target_link_libraries(parpack ${MPI_Fortran_LIBRARIES})
++    target_link_libraries(parpack arpack)
+     set_target_properties(parpack PROPERTIES OUTPUT_NAME parpack${LIBSUFFIX})
++    set_target_properties(parpack PROPERTIES VERSION 2.0.0)
++    set_target_properties(parpack PROPERTIES SOVERSION 2)
+ endif ()
+ 
+ if (INTERFACE64)
+@@ -389,3 +402,41 @@
+ add_test(bug_1323 Tests/bug_1323)
+ 
+ add_dependencies(check dnsimp_test bug_1315_single bug_1315_double bug_1323)
++
++if(MPI)
++#  add_executable(issue46 PARPACK/TESTS/MPI/issue46.f)
++#  target_link_libraries(issue46 parpack arpack ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
++#  add_test(issue46 Tests/issue46)
++endif()
++############################
++# install
++############################
++# 'make install' to the correct location
++include(GNUInstallDirs)
++
++# Convert variable names to those expected by the .pc file.
++set(prefix ${CMAKE_INSTALL_PREFIX})
++set(exec_prefix \${prefix})
++set(libdir \${exec_prefix}/${CMAKE_INSTALL_LIBDIR})
++set(PACKAGE_NAME ${PROJECT_NAME})
++# TODO: Fill these in with something appropriate.
++#set(PACKAGE_VERSION)
++#set(PACKAGE_URL)
++#set(LAPACK_LIBS)
++#set(BLAS_LIBS)
++configure_file(arpack.pc.in arpack${LIBSUFFIX}.pc @ONLY)
++
++#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/arpack${LIBSUFFIX}.pc
++#    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
++
++install(TARGETS arpack
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++
++if (MPI)
++  install(TARGETS parpack
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++endif ()

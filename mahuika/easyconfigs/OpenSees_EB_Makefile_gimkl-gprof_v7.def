@@ -88,7 +88,7 @@ UMFPACK_LIBRARY     = $(HOME)/lib/libumfpack.a
 METIS_LIBRARY       = 
 CSPARSE_LIBRARY     = $(HOME)/lib/libcsparse.a
 
-TCL_LIBRARY = $(EBROOTTCL)/lib/libtcl8.5.so
+TCL_LIBRARY = $(EBROOTTCL)/lib/libtcl8.6.so
 TCL_INCLUDES = -I$(EBROOTTCL)/include
 
 GRAPHIC_LIBRARY     = 
@@ -110,12 +110,12 @@ COMPILER_LIBS = -ldl
 ifeq ($(PROGRAMMING_MODE), SEQUENTIAL)
     OpenSees_PROGRAM = $(HOME)/bin/OpenSees
     PROGRAMMING_FLAG =
-    CC++            = $(CXX) 
+    CC++            = $(CXX)
 else
     CC++            =  $(MPICXX)
     CC              =  $(MPICC)
     FC              =  $(MPIF90)
-    F90             =  $(FC) 
+    F90             =  $(FC)
     FORTRAN         =  $(FC)
 endif
 
@@ -162,6 +162,9 @@ ifdef MUMPS
     MUMPS_LIBS =  -ldmumps -lmumps_common -lpord -lptesmumps -lptscotch -lscotch -lptscotcherr
 endif
 
+# Intel
+FORTRAN_LIBS = -lgfortran
+
 MACHINE_NUMERICAL_LIBS  = \
   $(ARPACK_LIBRARY) \
   $(SUPERLU_LIBRARY) \
@@ -169,7 +172,7 @@ MACHINE_NUMERICAL_LIBS  = \
   $(AMD_LIBRARY) \
   $(GRAPHIC_LIBRARY) \
   $(RELIABILITY_LIBRARY) \
-  $(DISTRIBUTED_SUPERLU_LIBRARY) $(CSPARSE_LIBRARY) $(PETSC_LIB) $(MUMPS_LIBS) $(METIS_LIBS) -lm
+  $(DISTRIBUTED_SUPERLU_LIBRARY) $(CSPARSE_LIBRARY) $(PETSC_LIB) $(MUMPS_LIBS) $(METIS_LIBS) $(FORTRAN_LIBS) -lm
 
 
 # %---------------------------------------------------------%
@@ -198,7 +201,7 @@ GRAPHIC_FLAG = -D_NOGRAPHICS
 RELIABILITY_FLAG =
 DEBUG_FLAG = 
 
-OPT_FLAG = -g -O2
+OPT_FLAG = -g -O3
 
 COMP_FLAG = 
 

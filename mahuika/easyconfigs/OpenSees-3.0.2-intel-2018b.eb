@@ -13,16 +13,16 @@ source_urls = ['https://github.com/OpenSees/OpenSees/archive']
 sources = ['V%(version)s.tar.gz']
 
 dependencies = [
-    ('Tcl', '8.6.6'),
+    ('Tcl', '8.5.19'), #'8.6.6'),
     ('METIS', metis_version),
     ('SuperLU', '5.2.1'),
 #    ('SuperLU_DIST', '4.3'),
-    ('arpack-ng', '3.6.3'),
+    ('arpack-ng', '3.4.0'), #'3.6.3'),
 #    ('SuiteSparse', '4.5.4', 'METIS-%s' % metis_version),
     ('MUMPS', '4.10.0', '-metis-%s' % metis_version),
 ]
 
-MAKEFILE = 'OpenSees_EB_Makefile_intel_v7.def'
+MAKEFILE = 'OpenSees_EB_Makefile_intel_v6.def'
 patches = [
     (MAKEFILE, 'MAKES'), 
 ]
