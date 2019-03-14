@@ -1,0 +1,32 @@
+name = 'arpack-ng'
+version = '3.6.3'
+
+homepage = 'https://github.com/opencollab/arpack-ng'
+description = """ARPACK is a collection of Fortran77 subroutines designed to solve large scale eigenvalue problems."""
+
+toolchain = {'name': 'CrayCCE', 'version': '18.08'}
+toolchainopts = {'opt': True, 'optarch': True, 'pic': True}
+
+source_urls = ['https://github.com/opencollab/%(namelower)s/archive/']
+sources = ['%(version)s.tar.gz']
+
+easyblock = 'CMakeMake'
+
+builddependencies = []
+
+configopts = '-DBUILD_SHARED_LIBS=ON '
+configopts += '-DBLAS_LIBRARIES="-L$EBVARBLAS_LAPACK_INC_DIR $EBVARLIBBLAS" '
+configopts += '-DLAPACK_LIBRARIES="-L$EBVARBLAS_LAPACK_INC_DIR $EBVARLIBLAPACK" '
+configopts += '-DSCALAPACK_LIBRARIES="-L$EBVARSCALAPACK_LIB_DIR $EBVARLIBSCALAPACK" '
+configopts += '-DMPI=ON '
+
+# This patch will not be needed for future versions
+if version == '3.4.0':
+    patches = ['arpack-ng-3.4.0_config.patch']
+
+sanity_check_paths = {
+    'files': ['lib64/libarpack.so', 'lib64/libparpack.so', ],
+    'dirs': []
+}
+
+moduleclass = 'numlib'
