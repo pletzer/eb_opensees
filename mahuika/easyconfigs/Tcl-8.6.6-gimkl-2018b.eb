@@ -17,7 +17,6 @@ dependencies = [
 ]
 
 configopts = '--enable-threads EXTRA_INSTALL="install-private-headers"'
-buildopts = 'CFLAGS="-g -O2"'
 
 runtest = 'test'
 
