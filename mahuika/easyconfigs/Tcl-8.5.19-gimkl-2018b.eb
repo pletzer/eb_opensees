@@ -1,7 +1,7 @@
 easyblock = 'ConfigureMake'
 
 name = 'Tcl'
-version = '8.6.6'
+version = '8.5.19'
 
 homepage = 'http://www.tcl.tk/'
 description = """Tcl (Tool Command Language) is a very powerful but easy to learn dynamic programming language,
@@ -17,7 +17,6 @@ dependencies = [
 ]
 
 configopts = '--enable-threads EXTRA_INSTALL="install-private-headers"'
-buildopts = "CFLAGS='-g -O3' CXXFLAGS='-g -O3'"
 
 runtest = 'test'
 

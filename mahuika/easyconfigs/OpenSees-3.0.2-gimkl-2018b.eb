@@ -2,7 +2,7 @@ easyblock = 'MakeCp'
 
 name = 'OpenSees'
 version = '3.0.2'
-metis_version = '5.1.0'
+metis_version = '4.0.3' #'5.1.0'
 homepage = 'http://opensees.berkeley.edu'
 description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
 
@@ -19,10 +19,10 @@ dependencies = [
 #    ('SuperLU_DIST', '4.3'),
     ('arpack-ng', '3.6.3'),
 #    ('SuiteSparse', '4.5.4', 'METIS-%s' % metis_version),
-    ('MUMPS', '5.1.2', '-metis-%s' % metis_version),
+    ('MUMPS', '4.10.0', '-metis-%s' % metis_version), #'5.1.2', '-metis-%s' % metis_version),
 ]
 
-MAKEFILE = 'OpenSees_EB_Makefile_gimkl_v7.def'
+MAKEFILE = 'OpenSees_EB_Makefile_v6.def'
 patches = [
     (MAKEFILE, 'MAKES'), 
 ]
