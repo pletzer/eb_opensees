@@ -12,12 +12,12 @@ sources = ['%(version)s.tar.gz']
 
 easyblock = 'CMakeMake'
 
-builddependencies = []
+builddependencies = [('cray-libsci/18.07.1', EXTERNAL_MODULE),]
 
 configopts = '-DBUILD_SHARED_LIBS=ON '
-configopts += '-DBLAS_LIBRARIES="-L$EBVARBLAS_LAPACK_INC_DIR $EBVARLIBBLAS" '
-configopts += '-DLAPACK_LIBRARIES="-L$EBVARBLAS_LAPACK_INC_DIR $EBVARLIBLAPACK" '
-configopts += '-DSCALAPACK_LIBRARIES="-L$EBVARSCALAPACK_LIB_DIR $EBVARLIBSCALAPACK" '
+configopts += '-DBLAS_LIBRARIES="-L$CRAY_LIBSCI_PREFIX_DIR -lsci_intel_mpi" '
+configopts += '-DLAPACK_LIBRARIES="-L$CRAY_LIBSCI_PREFIX_DIR -lsci_intel_mpi" '
+configopts += '-DSCALAPACK_LIBRARIES="-L$CRAY_LIBSCI_PREFIX_DIR -lsci_intel_mpi" '
 configopts += '-DMPI=ON '
 
 # This patch will not be needed for future versions
