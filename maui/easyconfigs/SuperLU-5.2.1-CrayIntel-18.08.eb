@@ -6,16 +6,17 @@ homepage = 'http://crd-legacy.lbl.gov/~xiaoye/SuperLU/'
 description = """A library for the direct solution of large, sparse, nonsymmetric systems
  of linear equations."""
 
-toolchain = {'name': 'CrayIntel', 'version': '18.08'}
+toolchain = {'name': 'CrayGNU', 'version': '18.08'}
 toolchainopts = {'opt': True, 'pic': True}
 
 source_urls = ['http://crd-legacy.lbl.gov/~xiaoye/SuperLU/']
 sources = ["superlu_%(version)s.tar.gz"]
 
-builddependencies = []
+builddependencies = [('cray-libsci/18.07.1', EXTERNAL_MODULE),]
 
 # Partially derived from unused superlu easyblock
-configopts = '-Denable_blaslib=OFF -DBUILD_SHARED_LIBS=ON -Denable_examples=OFF -DTPL_BLAS_LIBRARIES="$LIBBLAS_MT" '
+configopts = '-DBUILD_SHARED_LIBS=OFF -Denable_examples=OFF '
+configopts += '-DSUPERLU_USE_BUNDLED_BLAS=OFF -DBLAS_LIBRARIES="-L$CRAY_LIBSCI_PREFIX_DIR -lsci_gnu_mpi" '
 if toolchainopts.get('pic'):
     configopts += '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
 
