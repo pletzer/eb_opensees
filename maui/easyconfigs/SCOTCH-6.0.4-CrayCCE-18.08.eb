@@ -1,14 +1,32 @@
+easyblock = 'MakeCp'
+
 name = 'SCOTCH'
 version = '6.0.4'
-
 homepage = 'http://gforge.inria.fr/projects/scotch/'
-description = """Software package and libraries for sequential and parallel graph partitioning,
-static mapping, and sparse matrix block ordering, and sequential mesh and hypergraph partitioning."""
+description = "Software package and libraries for sequential and parallel graph partitioning, static mapping, and sparse matrix block ordering, and sequential mesh and hypergraph partitioning."
 
 toolchain = {'name': 'CrayCCE', 'version': '18.08'}
-toolchainopts = {'pic': True}
+toolchainopts = {'pic': True, 'usempi': True}
 
 source_urls = ['http://gforge.inria.fr/frs/download.php/file/34618/']
 sources = ['%(namelower)s_%(version)s.tar.gz']
+
+dependencies = []
+
+MAKEFILE_INC = 'SCOTCH_Makefile_CrayCCE.inc'
+patches = [
+    (MAKEFILE_INC, 'src/Make.inc'), 
+]
+
+prebuildopts = 'cd src && rm -f Makefile.inc && cp "Make.inc/%s" ./Makefile.inc && ' % MAKEFILE_INC
+
+files_to_copy = [(["bin/*"], "bin"), ]  # get repeatedly copied if len(MODES)>1, so no dirs
+
+sanity_check_paths = {
+    'files': ['bin/'+f for f in ('acpl', 'amk_ccc')],
+    'dirs': ["."],
+    }
+
+parallel = 1
 
 moduleclass = 'math'
