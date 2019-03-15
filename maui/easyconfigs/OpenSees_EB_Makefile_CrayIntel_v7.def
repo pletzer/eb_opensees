@@ -88,7 +88,7 @@ UMFPACK_LIBRARY     = $(HOME)/lib/libumfpack.a
 METIS_LIBRARY       = 
 CSPARSE_LIBRARY     = $(HOME)/lib/libcsparse.a
 
-TCL_LIBRARY = $(EBROOTTCL)/lib/libtcl8.6.so
+TCL_LIBRARY = $(EBROOTTCL)/lib/libtcl8.6.a
 TCL_INCLUDES = -I$(EBROOTTCL)/include
 
 GRAPHIC_LIBRARY     = 

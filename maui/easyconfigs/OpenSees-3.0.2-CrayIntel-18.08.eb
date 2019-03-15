@@ -43,6 +43,6 @@ sanity_check_paths = {
     'dirs': ["."],
     }
 
-parallel = 8
+parallel = 1
 
 moduleclass = 'cae'
