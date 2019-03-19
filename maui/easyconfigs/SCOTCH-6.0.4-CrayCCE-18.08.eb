@@ -20,7 +20,7 @@ patches = [
 
 prebuildopts = 'cd src && rm -f Makefile.inc && cp "Make.inc/%s" ./Makefile.inc && ' % MAKEFILE_INC
 
-files_to_copy = [(["bin/*"], "bin"), (["include/*"], "include"), (["lib/*"], "lib")]  # get repeatedly copied if len(MODES)>1, so no dirs
+files_to_copy = [(["bin/*"], "bin"), (["include/*"], "include"), (["lib/*"], "lib"), (["src/Makefile.inc"], "./"),]  # get repeatedly copied if len(MODES)>1, so no dirs
 
 sanity_check_paths = {
     'files': ['bin/'+f for f in ('acpl', 'amk_ccc')],

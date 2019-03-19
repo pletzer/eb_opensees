@@ -130,7 +130,7 @@ ifeq ($(PROGRAMMING_MODE), PARALLEL)
         PETSC = YES
     endif
     #DISTRIBUTED_SUPERLU_LIBRARY = -lsuperlu_dist
-    DISTRIBUTED_SUPERLU_LIBRARY = $(HOME)/lib/libDistributedSuperLU.a
+    DISTRIBUTED_SUPERLU_LIBRARY = # $(HOME)/lib/libDistributedSuperLU.a
     DISTRIBUTED_SUPERLU_INCLUDE = -I$(SUPERLU_DISTdir)
 else
     LAPACK_LIBS = $(LIBLAPACK)
