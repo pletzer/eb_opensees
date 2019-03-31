@@ -21,6 +21,8 @@ source_urls = [
 # Shared may be good for OpenSees which links in METIS directly and also via MUMPS,
 configopts = ['openmpi=1 shared=1']
 
+buildopts = ' OPTFLAGS="$OPTFLAGS -g" '
+
 #patches = ['METIS_IDXTYPEWIDTH.patch']
 
 builddependencies = []
