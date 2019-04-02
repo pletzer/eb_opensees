@@ -1,3 +1,222 @@
+diff -Naur tcl8.6.7/compat/zlib/configure tcl8.6.7-new/compat/zlib/configure
+--- tcl8.6.7/compat/zlib/configure	2017-03-10 15:01:23.000000000 +0000
++++ tcl8.6.7-new/compat/zlib/configure	2019-04-02 01:24:52.296757895 +0000
+@@ -194,9 +194,9 @@
+   fi
+   if test "$warn" -eq 1; then
+     if test "$zconst" -eq 1; then
+-      CFLAGS="${CFLAGS} -Wall -Wextra -Wcast-qual -pedantic -DZLIB_CONST"
++      CFLAGS="${CFLAGS} -Wextra -Wcast-qual -pedantic -DZLIB_CONST"
+     else
+-      CFLAGS="${CFLAGS} -Wall -Wextra -pedantic"
++      CFLAGS="${CFLAGS} -Wextra -pedantic"
+     fi
+   fi
+   if test $debug -eq 1; then
+diff -Naur tcl8.6.7/compat/zlib/nintendods/Makefile tcl8.6.7-new/compat/zlib/nintendods/Makefile
+--- tcl8.6.7/compat/zlib/nintendods/Makefile	2017-03-10 15:01:23.000000000 +0000
++++ tcl8.6.7-new/compat/zlib/nintendods/Makefile	2019-04-02 01:23:44.350240000 +0000
+@@ -26,7 +26,7 @@
+ #---------------------------------------------------------------------------------
+ ARCH	:=	-mthumb -mthumb-interwork
+ 
+-CFLAGS	:=	-Wall -O2\
++CFLAGS	:=	-O2\
+ 		-march=armv5te -mtune=arm946e-s \
+ 		-fomit-frame-pointer -ffast-math \
+ 		$(ARCH)
+diff -Naur tcl8.6.7/compat/zlib/treebuild.xml tcl8.6.7-new/compat/zlib/treebuild.xml
+--- tcl8.6.7/compat/zlib/treebuild.xml	2017-03-10 15:01:23.000000000 +0000
++++ tcl8.6.7-new/compat/zlib/treebuild.xml	2019-04-02 01:24:08.929037000 +0000
+@@ -102,7 +102,7 @@
+ CFLAGS=-O
+ #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
+ #CFLAGS=-g -DZLIB_DEBUG
+-#CFLAGS=-O3 -Wall -Wwrite-strings -Wpointer-arith -Wconversion \
++#CFLAGS=-O3 -Wwrite-strings -Wpointer-arith -Wconversion \
+ #           -Wstrict-prototypes -Wmissing-prototypes
+ 
+ # OBJA =
+diff -Naur tcl8.6.7/pkgs/itcl4.1.0/configure tcl8.6.7-new/pkgs/itcl4.1.0/configure
+--- tcl8.6.7/pkgs/itcl4.1.0/configure	2017-05-16 14:34:47.000000000 +0000
++++ tcl8.6.7-new/pkgs/itcl4.1.0/configure	2019-04-02 01:22:39.268367996 +0000
+@@ -6435,7 +6435,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/itcl4.1.0/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/itcl4.1.0/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/itcl4.1.0/tclconfig/tcl.m4	2017-08-09 14:45:56.000000000 +0000
++++ tcl8.6.7-new/pkgs/itcl4.1.0/tclconfig/tcl.m4	2019-04-02 01:22:01.168460211 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/sqlite3.20.0/configure tcl8.6.7-new/pkgs/sqlite3.20.0/configure
+--- tcl8.6.7/pkgs/sqlite3.20.0/configure	2017-08-04 11:57:41.000000000 +0000
++++ tcl8.6.7-new/pkgs/sqlite3.20.0/configure	2019-04-02 01:21:42.907103741 +0000
+@@ -6407,7 +6407,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/sqlite3.20.0/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/sqlite3.20.0/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/sqlite3.20.0/tclconfig/tcl.m4	2017-08-09 14:45:57.000000000 +0000
++++ tcl8.6.7-new/pkgs/sqlite3.20.0/tclconfig/tcl.m4	2019-04-02 01:20:30.535641824 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/tdbc1.0.5/configure tcl8.6.7-new/pkgs/tdbc1.0.5/configure
+--- tcl8.6.7/pkgs/tdbc1.0.5/configure	2017-05-04 18:55:32.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbc1.0.5/configure	2019-04-02 01:20:12.513977371 +0000
+@@ -6551,7 +6551,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/tdbc1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbc1.0.5/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/tdbc1.0.5/tclconfig/tcl.m4	2017-04-18 16:49:49.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbc1.0.5/tclconfig/tcl.m4	2019-04-02 01:19:54.724973551 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/tdbcmysql1.0.5/configure tcl8.6.7-new/pkgs/tdbcmysql1.0.5/configure
+--- tcl8.6.7/pkgs/tdbcmysql1.0.5/configure	2017-07-28 18:41:39.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcmysql1.0.5/configure	2019-04-02 01:17:55.768625444 +0000
+@@ -6899,7 +6899,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4	2017-04-18 16:50:46.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4	2019-04-02 01:17:38.630967196 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/tdbcodbc1.0.5/configure tcl8.6.7-new/pkgs/tdbcodbc1.0.5/configure
+--- tcl8.6.7/pkgs/tdbcodbc1.0.5/configure	2017-07-28 18:41:55.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcodbc1.0.5/configure	2019-04-02 01:19:34.629100819 +0000
+@@ -6909,7 +6909,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4	2017-08-09 14:45:57.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4	2019-04-02 01:19:19.047184506 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/tdbcpostgres1.0.5/configure tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/configure
+--- tcl8.6.7/pkgs/tdbcpostgres1.0.5/configure	2017-08-09 14:45:57.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/configure	2019-04-02 01:23:12.580994389 +0000
+@@ -6899,7 +6899,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4	2017-08-09 14:45:57.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4	2019-04-02 01:22:53.979684668 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4	2017-08-09 14:45:58.000000000 +0000
++++ tcl8.6.7-new/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4	2019-04-02 01:18:20.825728629 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
+diff -Naur tcl8.6.7/pkgs/thread2.8.1/configure tcl8.6.7-new/pkgs/thread2.8.1/configure
+--- tcl8.6.7/pkgs/thread2.8.1/configure	2017-05-23 13:17:07.000000000 +0000
++++ tcl8.6.7-new/pkgs/thread2.8.1/configure	2019-04-02 01:19:03.289555741 +0000
+@@ -6512,7 +6512,7 @@
+     if test "$GCC" = yes; then :
+ 
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+ 
+ else
+ 
+diff -Naur tcl8.6.7/pkgs/thread2.8.1/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/thread2.8.1/tclconfig/tcl.m4
+--- tcl8.6.7/pkgs/thread2.8.1/tclconfig/tcl.m4	2017-08-09 14:45:58.000000000 +0000
++++ tcl8.6.7-new/pkgs/thread2.8.1/tclconfig/tcl.m4	2019-04-02 01:18:45.095532977 +0000
+@@ -1179,7 +1179,7 @@
+     CFLAGS_DEBUG=-g
+     AS_IF([test "$GCC" = yes], [
+ 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_WARNING="-Wall"
++	CFLAGS_WARNING=""
+     ], [
+ 	CFLAGS_OPTIMIZE=-O
+ 	CFLAGS_WARNING=""
 diff -Naur tcl8.6.7/unix/configure tcl8.6.7-new/unix/configure
 --- tcl8.6.7/unix/configure	2017-08-09 14:45:58.000000000 +0000
 +++ tcl8.6.7-new/unix/configure	2019-04-02 00:57:03.077895061 +0000
