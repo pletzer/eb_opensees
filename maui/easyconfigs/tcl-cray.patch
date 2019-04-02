@@ -15,16 +15,19 @@ diff -Naur tcl8.6.7/compat/zlib/configure tcl8.6.7-new/compat/zlib/configure
    if test $debug -eq 1; then
 diff -Naur tcl8.6.7/compat/zlib/nintendods/Makefile tcl8.6.7-new/compat/zlib/nintendods/Makefile
 --- tcl8.6.7/compat/zlib/nintendods/Makefile	2017-03-10 15:01:23.000000000 +0000
-+++ tcl8.6.7-new/compat/zlib/nintendods/Makefile	2019-04-02 01:23:44.350240000 +0000
-@@ -26,7 +26,7 @@
++++ tcl8.6.7-new/compat/zlib/nintendods/Makefile	2019-04-02 01:41:21.181473000 +0000
+@@ -26,9 +26,9 @@
  #---------------------------------------------------------------------------------
  ARCH	:=	-mthumb -mthumb-interwork
  
 -CFLAGS	:=	-Wall -O2\
 +CFLAGS	:=	-O2\
  		-march=armv5te -mtune=arm946e-s \
- 		-fomit-frame-pointer -ffast-math \
+-		-fomit-frame-pointer -ffast-math \
++		 -ffast-math \
  		$(ARCH)
+ 
+ CFLAGS	+=	$(INCLUDE) -DARM9
 diff -Naur tcl8.6.7/compat/zlib/treebuild.xml tcl8.6.7-new/compat/zlib/treebuild.xml
 --- tcl8.6.7/compat/zlib/treebuild.xml	2017-03-10 15:01:23.000000000 +0000
 +++ tcl8.6.7-new/compat/zlib/treebuild.xml	2019-04-02 01:24:08.929037000 +0000
@@ -39,7 +42,7 @@ diff -Naur tcl8.6.7/compat/zlib/treebuild.xml tcl8.6.7-new/compat/zlib/treebuild
  # OBJA =
 diff -Naur tcl8.6.7/pkgs/itcl4.1.0/configure tcl8.6.7-new/pkgs/itcl4.1.0/configure
 --- tcl8.6.7/pkgs/itcl4.1.0/configure	2017-05-16 14:34:47.000000000 +0000
-+++ tcl8.6.7-new/pkgs/itcl4.1.0/configure	2019-04-02 01:22:39.268367996 +0000
++++ tcl8.6.7-new/pkgs/itcl4.1.0/configure	2019-04-02 01:41:21.245527570 +0000
 @@ -6435,7 +6435,7 @@
      if test "$GCC" = yes; then :
  
@@ -49,9 +52,27 @@ diff -Naur tcl8.6.7/pkgs/itcl4.1.0/configure tcl8.6.7-new/pkgs/itcl4.1.0/configu
  
  else
  
+@@ -6887,7 +6887,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7343,7 +7343,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/itcl4.1.0/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/itcl4.1.0/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/itcl4.1.0/tclconfig/tcl.m4	2017-08-09 14:45:56.000000000 +0000
-+++ tcl8.6.7-new/pkgs/itcl4.1.0/tclconfig/tcl.m4	2019-04-02 01:22:01.168460211 +0000
++++ tcl8.6.7-new/pkgs/itcl4.1.0/tclconfig/tcl.m4	2019-04-02 01:41:21.297395833 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -61,21 +82,81 @@ diff -Naur tcl8.6.7/pkgs/itcl4.1.0/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/itcl4.1.0/
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
+diff -Naur tcl8.6.7/pkgs/sqlite3.20.0/compat/sqlite3/sqlite3.c tcl8.6.7-new/pkgs/sqlite3.20.0/compat/sqlite3/sqlite3.c
+--- tcl8.6.7/pkgs/sqlite3.20.0/compat/sqlite3/sqlite3.c	2017-08-04 11:57:41.000000000 +0000
++++ tcl8.6.7-new/pkgs/sqlite3.20.0/compat/sqlite3/sqlite3.c	2019-04-02 02:09:31.430129194 +0000
+@@ -28358,9 +28358,9 @@
+   **      involving NaN. For example, x != x evaluates to true if x is NaN 
+   **      ...
+   */
+-#ifdef __FAST_MATH__
+-# error SQLite will not work correctly with the -ffast-math option of GCC.
+-#endif
++//#ifdef __FAST_MATH__
++//# error SQLite will not work correctly with the -ffast-math option of GCC.
++//#endif
+   volatile double y = x;
+   volatile double z = y;
+   rc = (y!=z);
 diff -Naur tcl8.6.7/pkgs/sqlite3.20.0/configure tcl8.6.7-new/pkgs/sqlite3.20.0/configure
 --- tcl8.6.7/pkgs/sqlite3.20.0/configure	2017-08-04 11:57:41.000000000 +0000
-+++ tcl8.6.7-new/pkgs/sqlite3.20.0/configure	2019-04-02 01:21:42.907103741 +0000
-@@ -6407,7 +6407,7 @@
++++ tcl8.6.7-new/pkgs/sqlite3.20.0/configure	2019-04-02 02:07:51.745290463 +0000
+@@ -6406,12 +6406,12 @@
+     CFLAGS_DEBUG=-g
      if test "$GCC" = yes; then :
  
- 	CFLAGS_OPTIMIZE=-O2
+-	CFLAGS_OPTIMIZE=-O2
 -	CFLAGS_WARNING="-Wall"
++	CFLAGS_OPTIMIZE=-O2 -h fp0
 +	CFLAGS_WARNING=""
  
  else
+-
+-	CFLAGS_OPTIMIZE=-O
++        # sql has problem with floating point accuracy
++	CFLAGS_OPTIMIZE=-O -h fp0
+ 	CFLAGS_WARNING=""
  
+ fi
+@@ -6859,7 +6859,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7315,7 +7315,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/sqlite3.20.0/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/sqlite3.20.0/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/sqlite3.20.0/tclconfig/tcl.m4	2017-08-09 14:45:57.000000000 +0000
-+++ tcl8.6.7-new/pkgs/sqlite3.20.0/tclconfig/tcl.m4	2019-04-02 01:20:30.535641824 +0000
++++ tcl8.6.7-new/pkgs/sqlite3.20.0/tclconfig/tcl.m4	2019-04-02 01:41:21.352168422 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -85,9 +166,27 @@ diff -Naur tcl8.6.7/pkgs/sqlite3.20.0/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/sqlite3
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbc1.0.5/configure tcl8.6.7-new/pkgs/tdbc1.0.5/configure
 --- tcl8.6.7/pkgs/tdbc1.0.5/configure	2017-05-04 18:55:32.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbc1.0.5/configure	2019-04-02 01:20:12.513977371 +0000
++++ tcl8.6.7-new/pkgs/tdbc1.0.5/configure	2019-04-02 01:41:21.414344311 +0000
 @@ -6551,7 +6551,7 @@
      if test "$GCC" = yes; then :
  
@@ -97,9 +196,27 @@ diff -Naur tcl8.6.7/pkgs/tdbc1.0.5/configure tcl8.6.7-new/pkgs/tdbc1.0.5/configu
  
  else
  
+@@ -7003,7 +7003,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7459,7 +7459,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbc1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbc1.0.5/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/tdbc1.0.5/tclconfig/tcl.m4	2017-04-18 16:49:49.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbc1.0.5/tclconfig/tcl.m4	2019-04-02 01:19:54.724973551 +0000
++++ tcl8.6.7-new/pkgs/tdbc1.0.5/tclconfig/tcl.m4	2019-04-02 01:41:21.455235934 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -109,9 +226,27 @@ diff -Naur tcl8.6.7/pkgs/tdbc1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbc1.0.5/
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcmysql1.0.5/configure tcl8.6.7-new/pkgs/tdbcmysql1.0.5/configure
 --- tcl8.6.7/pkgs/tdbcmysql1.0.5/configure	2017-07-28 18:41:39.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcmysql1.0.5/configure	2019-04-02 01:17:55.768625444 +0000
++++ tcl8.6.7-new/pkgs/tdbcmysql1.0.5/configure	2019-04-02 01:41:21.175110539 +0000
 @@ -6899,7 +6899,7 @@
      if test "$GCC" = yes; then :
  
@@ -121,9 +256,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcmysql1.0.5/configure tcl8.6.7-new/pkgs/tdbcmysql1.0
  
  else
  
+@@ -7351,7 +7351,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7807,7 +7807,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4	2017-04-18 16:50:46.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4	2019-04-02 01:17:38.630967196 +0000
++++ tcl8.6.7-new/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4	2019-04-02 01:41:21.158496248 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -133,9 +286,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcmysql1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcm
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcodbc1.0.5/configure tcl8.6.7-new/pkgs/tdbcodbc1.0.5/configure
 --- tcl8.6.7/pkgs/tdbcodbc1.0.5/configure	2017-07-28 18:41:55.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcodbc1.0.5/configure	2019-04-02 01:19:34.629100819 +0000
++++ tcl8.6.7-new/pkgs/tdbcodbc1.0.5/configure	2019-04-02 01:41:21.520937957 +0000
 @@ -6909,7 +6909,7 @@
      if test "$GCC" = yes; then :
  
@@ -145,9 +316,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcodbc1.0.5/configure tcl8.6.7-new/pkgs/tdbcodbc1.0.5
  
  else
  
+@@ -7361,7 +7361,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7817,7 +7817,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4	2017-08-09 14:45:57.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4	2019-04-02 01:19:19.047184506 +0000
++++ tcl8.6.7-new/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4	2019-04-02 01:41:21.579158327 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -157,9 +346,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcodbc1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcod
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcpostgres1.0.5/configure tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/configure
 --- tcl8.6.7/pkgs/tdbcpostgres1.0.5/configure	2017-08-09 14:45:57.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/configure	2019-04-02 01:23:12.580994389 +0000
++++ tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/configure	2019-04-02 01:41:21.189199004 +0000
 @@ -6899,7 +6899,7 @@
      if test "$GCC" = yes; then :
  
@@ -169,9 +376,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcpostgres1.0.5/configure tcl8.6.7-new/pkgs/tdbcpostg
  
  else
  
+@@ -7351,7 +7351,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7807,7 +7807,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4	2017-08-09 14:45:57.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4	2019-04-02 01:22:53.979684668 +0000
++++ tcl8.6.7-new/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4	2019-04-02 01:41:21.198058884 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -181,9 +406,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcpostgres1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/td
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4	2017-08-09 14:45:58.000000000 +0000
-+++ tcl8.6.7-new/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4	2019-04-02 01:18:20.825728629 +0000
++++ tcl8.6.7-new/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4	2019-04-02 01:43:04.930394283 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -193,9 +436,27 @@ diff -Naur tcl8.6.7/pkgs/tdbcsqlite3-1.0.5/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/td
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/thread2.8.1/configure tcl8.6.7-new/pkgs/thread2.8.1/configure
 --- tcl8.6.7/pkgs/thread2.8.1/configure	2017-05-23 13:17:07.000000000 +0000
-+++ tcl8.6.7-new/pkgs/thread2.8.1/configure	2019-04-02 01:19:03.289555741 +0000
++++ tcl8.6.7-new/pkgs/thread2.8.1/configure	2019-04-02 01:43:04.948111622 +0000
 @@ -6512,7 +6512,7 @@
      if test "$GCC" = yes; then :
  
@@ -205,9 +466,27 @@ diff -Naur tcl8.6.7/pkgs/thread2.8.1/configure tcl8.6.7-new/pkgs/thread2.8.1/con
  
  else
  
+@@ -6964,7 +6964,7 @@
+ fi
+ 
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -7420,7 +7420,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/pkgs/thread2.8.1/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/thread2.8.1/tclconfig/tcl.m4
 --- tcl8.6.7/pkgs/thread2.8.1/tclconfig/tcl.m4	2017-08-09 14:45:58.000000000 +0000
-+++ tcl8.6.7-new/pkgs/thread2.8.1/tclconfig/tcl.m4	2019-04-02 01:18:45.095532977 +0000
++++ tcl8.6.7-new/pkgs/thread2.8.1/tclconfig/tcl.m4	2019-04-02 01:43:04.938616130 +0000
 @@ -1179,7 +1179,7 @@
      CFLAGS_DEBUG=-g
      AS_IF([test "$GCC" = yes], [
@@ -217,6 +496,24 @@ diff -Naur tcl8.6.7/pkgs/thread2.8.1/tclconfig/tcl.m4 tcl8.6.7-new/pkgs/thread2.
      ], [
  	CFLAGS_OPTIMIZE=-O
  	CFLAGS_WARNING=""
+@@ -1348,7 +1348,7 @@
+ 		# mingw gcc mode
+ 		AC_CHECK_TOOL(RC, windres)
+ 		CFLAGS_DEBUG="-g"
+-		CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++		CFLAGS_OPTIMIZE="-O2 "
+ 		SHLIB_LD='${CC} -shared'
+ 		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+ 		LDFLAGS_CONSOLE="-wl,--subsystem,console ${lflags}"
+@@ -1607,7 +1607,7 @@
+ 	    SHLIB_SUFFIX=".so"
+ 
+ 	    # TEA specific:
+-	    CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
++	    CFLAGS_OPTIMIZE="-O2 "
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}'
 diff -Naur tcl8.6.7/unix/configure tcl8.6.7-new/unix/configure
 --- tcl8.6.7/unix/configure	2017-08-09 14:45:58.000000000 +0000
 +++ tcl8.6.7-new/unix/configure	2019-04-02 00:57:03.077895061 +0000

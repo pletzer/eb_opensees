@@ -1,3 +1,5 @@
+easyblock = 'MakeCp'
+
 name = 'MUMPS'
 version = '4.10.0'
 versionsuffix = '-metis-4.0.3'
@@ -16,6 +18,8 @@ dependencies = [
     ('SCOTCH', '6.0.4'),
     ('METIS', '4.0.3'),
 ]
+
+prebuildopts = 'cd src && rm -f Makefile.inc && cp "Make.inc/%s" ./Makefile.inc && ' % MAKEFILE_INC
 
 parallel = 1
 buildopts = 'all'
