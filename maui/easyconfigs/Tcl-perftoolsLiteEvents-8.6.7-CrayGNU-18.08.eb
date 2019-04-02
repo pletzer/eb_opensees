@@ -1,0 +1,33 @@
+# alexander.pletzer@nesi.org.nz
+easyblock = 'ConfigureMake'
+
+name = 'Tcl-perftoolsLiteEvents'
+version = '8.6.7'
+
+homepage = 'http://www.tcl.tk/'
+description = """Tcl (Tool Command Language) is a very powerful but easy to learn dynamic programming language,
+ suitable for a very wide range of uses, including web and desktop applications, networking, administration, testing and many more."""
+
+toolchain = {'name': 'CrayGNU', 'version': '18.08'}
+toolchainopts = {'opt': True, 'pic': True}
+
+sources = ['tcl%(version)s-src.tar.gz']
+source_urls = ['https://prdownloads.sourceforge.net/tcl']
+checksums = [
+    '5673aaf45b5de5d8dd80bb3daaeb8838'
+]
+
+start_dir = 'unix'
+
+builddependencies = [
+                     ('perftools-lite-events', EXTERNAL_MODULE),
+                     ]
+
+dependencies = [
+]
+
+configopts = '--enable-threads EXTRA_INSTALL="install-private-headers"'
+buildopts = ' CFLAGS="$CFLAGS -g -O3" ' 
+runtest = 'test'
+
+moduleclass = 'lang'
