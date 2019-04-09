@@ -1,0 +1,200 @@
+diff -Naur OpenSees-3.0.2/SRC/modelbuilder/tcl/readNetcdf.h OpenSees-3.0.2-new/SRC/modelbuilder/tcl/readNetcdf.h
+--- OpenSees-3.0.2/SRC/modelbuilder/tcl/readNetcdf.h	1970-01-01 00:00:00.000000000 +0000
++++ OpenSees-3.0.2-new/SRC/modelbuilder/tcl/readNetcdf.h	2019-04-09 01:15:01.854743000 +0000
+@@ -0,0 +1,68 @@
++#include <vector>
++#include <string>
++#include <netcdf.h>
++
++#ifndef READ_NETCDF_H
++#define READ_NETCDF_H
++
++size_t getTotalSize(int ncid, int varid) {
++
++	int ndims, ier;
++	ier = nc_inq_varndims(ncid, varid, &ndims);
++
++	// get the dimension Ids
++	int dimids[ndims]; 
++	ier = nc_inq_vardimid(ncid, varid, dimids);
++
++	// get the sizes
++	size_t n;
++	size_t ntot = 1;
++	for (int i = 0; i < ndims; ++i) {
++		ier = nc_inq_dimlen(ncid, dimids[i], &n);
++		ntot *= n;
++	}
++
++	return ntot;	
++}
++
++std::vector<int> readNetcdfInt(const char* filename, const char* varname) {
++
++	std::vector<int> res;
++	int ncid, ier, varid;
++
++	ier = nc_open(filename, NC_NOWRITE, &ncid);
++
++	// get the variable's Id
++	ier = nc_inq_varid(ncid, varname, &varid);
++
++	size_t ntot = getTotalSize(ncid, varid);
++
++	res.resize(ntot);
++	// read the data
++	ier = nc_get_var_int(ncid, varid, &res[0]);
++
++	nc_close(ncid);
++	return res;
++}
++std::vector<double> readNetcdfDouble(const char* filename, const char* varname) {
++
++	std::vector<double> res;
++	int ncid, ier, varid;
++
++	ier = nc_open(filename, NC_NOWRITE, &ncid);
++
++	// get the variable's Id
++	ier = nc_inq_varid(ncid, varname, &varid);
++
++	size_t ntot = getTotalSize(ncid, varid);
++	
++	res.resize(ntot);
++	// read the data
++	ier = nc_get_var_double(ncid, varid, &res[0]);
++
++	nc_close(ncid);
++	return res;
++}
++
++
++#endif 
+diff -Naur OpenSees-3.0.2/SRC/modelbuilder/tcl/TclModelBuilder.cpp OpenSees-3.0.2-new/SRC/modelbuilder/tcl/TclModelBuilder.cpp
+--- OpenSees-3.0.2/SRC/modelbuilder/tcl/TclModelBuilder.cpp	2019-01-24 18:23:42.000000000 +0000
++++ OpenSees-3.0.2-new/SRC/modelbuilder/tcl/TclModelBuilder.cpp	2019-04-09 02:11:28.114239000 +0000
+@@ -39,6 +39,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <readNetcdf.h>
+ 
+ #include <Matrix.h>
+ #include <Vector.h>
+@@ -165,6 +166,10 @@
+ 		   TCL_Char **argv);
+ 
+ int
++TclCommand_addNodesFromNetcdf(ClientData clientData, Tcl_Interp *interp, int argc, 
++		   TCL_Char **argv);
++
++int
+ TclCommand_addElement(ClientData clientData, Tcl_Interp *interp,  int argc, 
+ 		      TCL_Char **argv);
+ 
+@@ -471,6 +476,9 @@
+   Tcl_CreateCommand(interp, "node", TclCommand_addNode,
+ 		    (ClientData)NULL, NULL);
+ 
++  Tcl_CreateCommand(interp, "nodesFromNetcdf", TclCommand_addNodesFromNetcdf,
++		    (ClientData)NULL, NULL);
++
+   Tcl_CreateCommand(interp, "element", TclCommand_addElement,
+ 		    (ClientData)NULL, NULL);
+ 
+@@ -1266,6 +1274,95 @@
+ 
+   // if get here we have sucessfully created the node and added it to the domain
+   return TCL_OK;
++}
++
++int
++TclCommand_addNodesFromNetcdf(ClientData clientData, Tcl_Interp *interp, int argc, 
++                              TCL_Char **argv)
++{
++
++  // ensure the destructor has not been called - 
++  if (theTclBuilder == 0) {
++    opserr << "WARNING builder has been destroyed" << endln;
++    return TCL_ERROR;
++  }
++
++  int ndm = theTclBuilder->getNDM();
++  int ndf = theTclBuilder->getNDF();
++
++  const char* filename = argv[1];
++
++  std::vector<int> nodeIds = readNetcdfInt(filename, "nodalIds");
++  std::vector<double> xyz = readNetcdfDouble(filename, "nodalCoordinates");
++
++  // check
++  if (nodeIds.size() == 0) {
++  	opserr << "WARNING failed to read the nodal Ids\n";
++  	return TCL_ERROR;
++  }
++  if (xyz.size() == 0) {
++  	opserr << "WARNING failed to read the nodal coordinates\n";
++  	return TCL_ERROR;
++  }
++   if (xyz.size() != nodeIds.size() * ndm) {
++  	opserr << "WARNING incorrect number of nodal coordinates, got " 
++  	       << xyz.size() << " expected " << nodeIds.size() * ndm << "\n";
++  	return TCL_ERROR;
++  }
++
++  // add the nodes
++  Node *theNode = 0;
++
++  if (ndm == 3) {
++  	for (size_t i = 0; i < nodeIds.size(); ++i) {
++  	    int nodeId = nodeIds[i];
++  	    double xLoc = xyz[i*ndm + 0];
++  	    double yLoc = xyz[i*ndm + 1];
++  	    double zLoc = xyz[i*ndm + 2];
++  	    theNode = new Node(nodeId, ndf, xLoc, yLoc, zLoc); 
++	    if (theTclDomain->addNode(theNode) == false) {
++    	        opserr << "WARNING failed to add node to the domain\n";
++    	        opserr << "node: " << nodeId << endln;
++    	        delete theNode; // otherwise memory leak                                    
++    	        return TCL_ERROR;
++            }
++  	}
++  }
++  else if (ndm == 2) {
++  	for (size_t i = 0; i < nodeIds.size(); ++i) {
++  	    int nodeId = nodeIds[i];
++  	    double xLoc = xyz[i*ndm + 0];
++  	    double yLoc = xyz[i*ndm + 1];
++  	    theNode = new Node(nodeId,ndf,xLoc, yLoc); 
++	    if (theTclDomain->addNode(theNode) == false) {
++                opserr << "WARNING failed to add node to the domain\n";
++    	        opserr << "node: " << nodeId << endln;
++    	        delete theNode; // otherwise memory leak                                    
++    	        return TCL_ERROR;
++       	    }
++  	}
++  }
++  else if (ndm == 1) {
++  	for (size_t i = 0; i < nodeIds.size(); ++i) {
++  	    int nodeId = nodeIds[i];
++  	    double xLoc = xyz[i*ndm + 0];
++  	    theNode = new Node(nodeId,ndf,xLoc); 
++	    if (theTclDomain->addNode(theNode) == false) {
++    	        opserr << "WARNING failed to add node to the domain\n";
++    	        opserr << "node: " << nodeId << endln;
++    	        delete theNode; // otherwise memory leak                                    
++    	        return TCL_ERROR;
++  	    }
++  	}
++  } else {
++      opserr << "WARNING invalid ndm\n";
++      return TCL_ERROR;
++  }
++
++  // Not handling mass at this point
++
++  // if get here we have sucessfully created the node and added it to the domain
++  return TCL_OK;
+ }
+ 
+ 

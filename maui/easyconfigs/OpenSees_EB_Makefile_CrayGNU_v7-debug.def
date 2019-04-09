@@ -1,0 +1,298 @@
+############################################################################
+#
+#  Program:  OpenSees
+#
+#  Purpose:  A Top-level Makefile to create the libraries needed
+#            to use the OpenSees framework.
+#
+#  version created for NeSI Pan Cluster for EasyBuild integration
+#
+#  Written by Jordi Blasco <jordi.blasco@nesi.org.nz>
+#
+############################################################################
+
+HOME = .
+PROGRAMMING_MODE ?= SEQUENTIAL
+
+
+# %---------------------------------%
+# |  SECTION 2: MAKEFILE CONSTANTS  |
+# %---------------------------------%
+#
+# Specify the constants the are used as control structure variables in the Makefiles.
+
+OPERATING_SYSTEM = LINUX
+
+#DEBUG_MODE = DEBUG, NO_DEBUG
+DEBUG_MODE = NO_DEBUG
+
+RELIABILITY = NO_RELIABILITY
+
+GRAPHICS = NONE
+
+# Redundant and fake (incXXX) paths here are placeholders since at least one OpenSees sub-Makefile 
+# refers to some of them and so they break the compiler command line if not set to something.
+BLASdir      = incBLAS
+CBLASdir     = incCBLAS
+AMDdir       = $(HOME)/OTHER/AMD
+LAPACKdir    = incLAPACK
+ARPACKdir    = incARPACK
+UMFPACKdir   = $(HOME)/OTHER/UMFPACK
+METISdir     = incMETIS
+SRCdir       = $(HOME)/SRC
+CSPARSEdir   = $(HOME)/OTHER/CSPARSE
+SUPERLUdir   = incSUPERLU
+#SUPERLUdir   = $(HOME)/OTHER/SuperLU_5.0/SRC
+#SUPERLUdir   = $(EBROOTSUPERLU)/include
+
+# OpenSees > r2504 use newer SuperLU_DIST which could be 
+# turned into a dependency
+# SUPERLU_DISTdir = $(EBROOTSUPERLU)/include
+SUPERLU_DISTdir = $(HOME)/OTHER/SuperLU_DIST_4.3/SRC
+
+ifeq ($(PROGRAMMING_MODE), SEQUENTIAL)
+    DIRS = $(SRCdir) $(UMFPACKdir) $(CSPARSEdir) $(AMDdir) 
+else
+    DIRS = $(SRCdir) $(UMFPACKdir) $(CSPARSEdir) $(AMDdir) $(SUPERLU_DISTdir) 
+endif
+
+
+# %-------------------------------------------------------%
+# | SECTION 4: LIBRARIES                                  |
+# |                                                       |
+# | The following section defines the libraries that will |
+# | be created and/or linked with when the libraries are  |
+# | being created or linked with.                         |
+# %-------------------------------------------------------%
+#
+# Note: if vendor supplied BLAS and LAPACK libraries leave the
+# libraries blank. You have to get your own copy of the tcl/tk 
+# library!! 
+#
+# Note: For libraries that will be created (any in DIRS above)
+# make sure the directory exsists where you want the library to go!
+
+FE_LIBRARY          = $(HOME)/lib/libOpenSees.a
+NDARRAY_LIBRARY     = $(HOME)/lib/libndarray.a
+MATMOD_LIBRARY      = $(HOME)/lib/libmatmod.a
+BJMISC_LIBRARY      = $(HOME)/lib/libBJmisc.a
+SCALAPACK_LIBRARY   = 
+LAPACK_LIBRARY      = 
+BLAS_LIBRARY        = 
+BLACS_LIBRARY       = 
+SUPERLU_LIBRARY     = -lsuperlu
+AMD_LIBRARY         = $(HOME)/lib/libamd.a
+CBLAS_LIBRARY       = 
+ARPACK_LIBRARY      = -larpack
+UMFPACK_LIBRARY     = $(HOME)/lib/libumfpack.a
+METIS_LIBRARY       = 
+CSPARSE_LIBRARY     = $(HOME)/lib/libcsparse.a
+
+TCL_LIBRARY = $(EBROOTTCL)/lib/libtcl8.6.so
+TCL_INCLUDES = -I$(EBROOTTCL)/include
+
+GRAPHIC_LIBRARY     = 
+
+#RELIABILITY_LIBRARY = $(HOME)/lib/libReliability.a
+RELIABILITY_LIBRARY = 
+
+# WATCH OUT .. These libraries are removed when 'make wipe' is invoked.
+
+WIPE_LIBS	= $(FE_LIBRARY) \
+           $(NDARRAY_LIBRARY) \
+           $(MATMOD_LIBRARY) \
+
+FE = $(HOME)/SRC
+
+#COMPILER_LIBS = -lifcore
+COMPILER_LIBS = -ldl
+
+ifeq ($(PROGRAMMING_MODE), SEQUENTIAL)
+    OpenSees_PROGRAM = $(HOME)/bin/OpenSees
+    PROGRAMMING_FLAG =
+    CC++            = $(CXX)
+else
+    CC++            =  $(MPICXX)
+    CC              =  $(MPICC)
+    FC              =  $(MPIF90)
+    F90             =  $(FC)
+    FORTRAN         =  $(FC)
+endif
+
+ifeq ($(PROGRAMMING_MODE), PARALLEL)
+    OpenSees_PROGRAM = $(HOME)/bin/OpenSeesSP
+    PROGRAMMING_FLAG = -D_PARALLEL_PROCESSING
+    LAPACK_LIBS = $(LIBSCALAPACK)
+    ifdef EBROOTMUMPS
+        MUMPS = YES
+    endif
+    ifdef EBROOTPETSC
+        PETSC = YES
+    endif
+    #DISTRIBUTED_SUPERLU_LIBRARY = -lsuperlu_dist
+    DISTRIBUTED_SUPERLU_LIBRARY = $(HOME)/lib/libDistributedSuperLU.a
+    DISTRIBUTED_SUPERLU_INCLUDE = -I$(SUPERLU_DISTdir)
+else
+    LAPACK_LIBS = $(LIBLAPACK)
+    DISTRIBUTED_SUPERLU_LIBRARY = 
+    DISTRIBUTED_SUPERLU_INCLUDE =
+endif
+
+ifeq ($(PROGRAMMING_MODE), PARALLEL_INTERPRETERS)
+    OpenSees_PROGRAM = $(HOME)/bin/OpenSeesMP
+    PROGRAMMING_FLAG = -D_PARALLEL_INTERPRETERS
+endif
+
+METIS_LIBS = -lmetis
+LINKER          = $(CC++)
+MACHINE_SPECIFIC_LIBS = $(LAPACK_LIBS) $(LIBBLAS) $(COMPILER_LIBS)
+
+ifdef PETSC
+    PETSC_FLAG = -D_PETSC
+    BOPT = g
+    PETSC_LIB = \
+        $(FE)/system_of_eqn/linearSOE/petsc/PetscSOE.o \
+        $(FE)/system_of_eqn/linearSOE/petsc/PetscSolver.o \
+        $(FE)/system_of_eqn/linearSOE/petsc/PetscSparseSeqSolver.o \
+        -lpetsc
+endif
+
+ifdef MUMPS
+    MUMPS_FLAG = -D_MUMPS
+    MUMPS_LIBS =  -ldmumps -lmumps_common -lpord -lptesmumps -lptscotch -lscotch -lptscotcherr
+endif
+
+# Intel
+FORTRAN_LIBS = -lgfortran
+
+MACHINE_NUMERICAL_LIBS  = \
+  $(ARPACK_LIBRARY) \
+  $(SUPERLU_LIBRARY) \
+  $(UMFPACK_LIBRARY) \
+  $(AMD_LIBRARY) \
+  $(GRAPHIC_LIBRARY) \
+  $(RELIABILITY_LIBRARY) \
+  $(DISTRIBUTED_SUPERLU_LIBRARY) $(CSPARSE_LIBRARY) $(PETSC_LIB) $(MUMPS_LIBS) $(METIS_LIBS) $(FORTRAN_LIBS) -lm
+
+
+# %---------------------------------------------------------%
+# | SECTION 5: COMPILERS                                    |
+# |                                                         |
+# | The following macros specify compilers, linker/loaders, |
+# | the archiver, and their options.  You need to make sure |
+# | these are correct for your system.                      |
+# %---------------------------------------------------------%
+
+# ################################################### 
+# # Compilers
+# ################################################### 
+
+AR = ar 
+ARCH = ar 
+
+ARFLAGS = -q
+ARCHFLAGS = -v -q
+
+RANLIB = ranlib
+RANLIBFLAGS = 
+
+GRAPHIC_FLAG = -D_NOGRAPHICS
+
+RELIABILITY_FLAG =
+DEBUG_FLAG = 
+
+OPT_FLAG = -g -O0 
+
+COMP_FLAG = 
+
+C++FLAGS = -D_LINUX -D_UNIX  $(GRAPHIC_FLAG) $(RELIABILITY_FLAG) $(DEBUG_FLAG) $(OPT_FLAG) $(COMP_FLAG)\
+        $(PROGRAMMING_FLAG) $(PETSC_FLAG) $(MUMPS_FLAG) \
+        -D_TCL85 -D_BLAS
+
+CFLAGS          =  $(GRAPHIC_FLAG) $(RELIABILITY_FLAG) $(DEBUG_FLAG) $(PROGRAMMING_FLAG) $(OPT_FLAG) $(COMP_FLAG) -D_TCL85 -D_BLAS
+FFLAGS          =  $(OPT_FLAG) $(COMP_FLAG)
+LINKFLAGS       = 
+
+
+# Misc
+MAKE            = make
+CD              = cd
+ECHO            = echo
+RM              = rm
+RMFLAGS         = -f
+SHELL           = /bin/sh
+
+# %---------------------------------------------------------%
+# | SECTION 6: COMPILATION                                  |
+# |                                                         |
+# | The following macros specify the macros used in         |
+# | to compile the source code into object code.            |
+# %---------------------------------------------------------%
+
+.SUFFIXES:
+.SUFFIXES:	.C .c .f .f90 .cpp .o .cpp
+
+#
+# %------------------%
+# | Default command. |
+# %------------------%
+#
+.DEFAULT:
+	@@$(ECHO) "Unknown target $@@, try:  make help"
+#
+# %-----------------------------------------------%
+# |  Command to build .o files from source files. |
+# %-----------------------------------------------%
+#
+
+
+.cpp.o: 
+	@$(ECHO) Making $@ from $< 
+	$(CC++) $(C++FLAGS) $(INCLUDES) -c $<
+
+.C.o:
+	@$(ECHO) Making $@ from $<
+	$(CC++) $(C++FLAGS) $(INCLUDES) -c $<
+
+.c.o:
+	@$(ECHO) Making $@ from $<
+	$(CC) $(CFLAGS) -c  $< 
+
+.f.o:      
+	@$(ECHO) Making $@ from $<
+	$(FC) $(FFLAGS) -c  $< 
+
+.f77.o:      
+	@$(ECHO) Making $@ from $<
+	$(FC) $(FFLAGS) -c $< 
+
+.f90.o:      
+	@$(ECHO) Making $@ from $<
+	$(FC90) $(FFLAGS) -c $<
+
+# %---------------------------------------------------------%
+# | SECTION 7: OTHER LIBRARIES                              |
+# |                                                         |
+# | The following macros specify other libraries that must  |
+# | be linked with when creating executables. These are     |
+# | platform specific and typically order does matter!!     |
+# %---------------------------------------------------------%
+
+MACHINE_LINKLIBS  = -L$(HOME)/lib
+
+# %---------------------------------------------------------%
+# | SECTION 8: INCLUDE FILES                                |
+# |                                                         |
+# | The following macros specify include files needed for   |
+# | compilation.                                            |
+# %---------------------------------------------------------%
+
+MACHINE_INCLUDES = \
+	-I/usr/include/mysql \
+	-I$(HOME)/include \
+	$(DISTRIBUTED_SUPERLU_INCLUDE)
+
+# this file contains all the OpenSees/SRC includes
+include $(FE)/Makefile.incl
+
+INCLUDES =  $(TCL_INCLUDES) $(FE_INCLUDES) $(MACHINE_INCLUDES)
