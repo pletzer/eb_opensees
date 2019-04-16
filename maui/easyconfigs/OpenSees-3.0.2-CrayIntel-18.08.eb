@@ -22,6 +22,14 @@ dependencies = [
     ('MUMPS', '4.10.0', '-metis-%s' % metis_version), #'5.1.2', '-metis-%s' % metis_version),
 ]
 
+hiddendependencies = [
+    ('METIS', metis_version),
+    ('SuperLU', '5.2.1'),
+    ('arpack-ng', '3.6.3'),
+    ('MUMPS', '4.10.0', '-metis-%s' % metis_version), #'5.1.2', '-metis-%s' % metis_version),
+]
+
+
 MAKEFILE = 'OpenSees_EB_Makefile_CrayIntel_v7.def'
 patches = [
     (MAKEFILE, 'MAKES'), 

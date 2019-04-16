@@ -15,8 +15,14 @@ dependencies = [
     ('SCOTCH', '6.0.4'),
     ('METIS', '4.0.3'),
 ]
+hiddendependencies = [
+    ('SCOTCH', '6.0.4'),
+    ('METIS', '4.0.3'),
+]
 
 parallel = 1
 buildopts = 'all'
+
+hidden = True
 
 moduleclass = 'math'
