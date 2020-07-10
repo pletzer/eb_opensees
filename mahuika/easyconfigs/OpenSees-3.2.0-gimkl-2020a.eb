@@ -13,7 +13,7 @@ source_urls = ['https://github.com/OpenSees/OpenSees/archive']
 sources = ['v%(version)s.tar.gz']
 
 dependencies = [
-    ('Tcl', '8.6.6'),
+    ('Tcl', '8.6.10'),
     ('METIS', metis_version),
     ('SuperLU', '5.2.1'),
 #    ('SuperLU_DIST', '4.3'),
