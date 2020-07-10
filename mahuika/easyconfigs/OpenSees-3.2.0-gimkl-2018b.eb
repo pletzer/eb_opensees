@@ -1,7 +1,7 @@
 easyblock = 'MakeCp'
 
 name = 'OpenSees'
-version = '3.0.2'
+version = '3.2.0'
 metis_version = '4.0.3' #'5.1.0'
 homepage = 'http://opensees.berkeley.edu'
 description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
@@ -10,7 +10,7 @@ toolchain = {'name': 'gimkl', 'version': '2018b'}
 toolchainopts = {'pic': True, 'usempi': True}
 
 source_urls = ['https://github.com/OpenSees/OpenSees/archive']
-sources = ['V%(version)s.tar.gz']
+sources = ['v%(version)s.tar.gz']
 
 dependencies = [
     ('Tcl', '8.6.6'),
