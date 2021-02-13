@@ -26,4 +26,6 @@ sanity_check_paths = {
     'dirs': ["include"],
 }
 
+hidden = True
+
 moduleclass = 'numlib'

@@ -25,4 +25,6 @@ configopts = ['openmpi=1 shared=1']
 
 builddependencies = []
 
+hidden = True
+
 moduleclass = 'math'
