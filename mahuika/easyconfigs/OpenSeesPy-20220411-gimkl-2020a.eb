@@ -25,8 +25,8 @@ dependencies = [
     ('SuperLU', '5.2.1'),
 #    ('SuperLU_DIST', '4.3'),
     ('arpack-ng', '3.6.3'),
-    ('SuiteSparse', '5.6.0', 'METIS-%s' % metis_version),
-    ('MUMPS', '4.10.0', '-metis-%s' % metis_version), #'5.1.2', '-metis-%s' % metis_version),
+    ('SuiteSparse', '5.6.0', '-METIS-%s' % metis_version),
+    ('MUMPS', '5.3.1', '-METIS-%s' % metis_version), #'5.1.2', '-metis-%s' % metis_version),
 ]
 
 MAKEFILE = 'Makefile-py-mahuika.def'
