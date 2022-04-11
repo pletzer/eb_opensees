@@ -1,0 +1,50 @@
+easyblock = 'MakeCp'
+
+name = 'OpenSeesPy'
+version = '20220411'
+metis_version = '5.1.0'
+homepage = 'http://opensees.berkeley.edu'
+description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
+
+toolchain = {'name': 'gimkl', 'version': '2020a'}
+toolchainopts = {'pic': True, 'usempi': True}
+
+sources = [{
+    'filename': 'OpenSees-%(version)s.tar.gz',
+    'git_config': {
+        'url': 'https://github.com/OpenSees',
+        'repo_name': 'OpenSees',
+        'commit': '5bebf19',
+    },
+}]
+
+dependencies = [
+    ('Python', '3.9.9'),
+    ('Tcl', '8.6.10'),
+    ('METIS', metis_version),
+    ('SuperLU', '5.2.1'),
+#    ('SuperLU_DIST', '4.3'),
+    ('arpack-ng', '3.6.3'),
+    ('SuiteSparse', '5.6.0', 'METIS-%s' % metis_version),
+    ('MUMPS', '4.10.0', '-metis-%s' % metis_version), #'5.1.2', '-metis-%s' % metis_version),
+]
+
+MAKEFILE = 'Makefile-py-mahuika.def'
+patches = [
+    (MAKEFILE, 'MAKES'),
+]
+prebuildopts = 'rm -f Makefile.def && cp "MAKES/%s" ./Makefile.def && mkdir -p lib && ' % MAKEFILE
+
+# make python
+buildopts = ['python CHOME=$(pwd)']
+
+files_to_copy = [(["SRC/interpreter/opensees.so"], "lib"), "Makefile.def"] 
+
+sanity_check_paths = {
+    'files': ["lib/opensees.so"],
+    'dirs': ["."],
+    }
+
+parallel = 1
+
+moduleclass = 'cae'
