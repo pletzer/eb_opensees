@@ -4,7 +4,7 @@ name = 'OpenSeesPy'
 version = '20220411'
 metis_version = '5.1.0'
 homepage = 'http://opensees.berkeley.edu'
-description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
+description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes. This module builds a shared object (opensees.so) which can be loaded in Python applications."
 
 toolchain = {'name': 'gimkl', 'version': '2020a'}
 toolchainopts = {'pic': True, 'usempi': True}
@@ -45,6 +45,6 @@ sanity_check_paths = {
     'dirs': ["."],
     }
 
-parallel = 1
+parallel = 4
 
 moduleclass = 'cae'
