@@ -40,11 +40,14 @@ buildopts = ['python CHOME=$(pwd)']
 
 files_to_copy = [(["SRC/interpreter/opensees.so"], "lib"), "Makefile.def"] 
 
+# set PYTHONPATH to find opensees.so
+modextravars = { 'PYTHONPATH': '%(installdir)s/lib'} 
+
 sanity_check_paths = {
     'files': ["lib/opensees.so"],
     'dirs': ["."],
     }
 
-parallel = 1
+parallel = 8
 
 moduleclass = 'cae'
